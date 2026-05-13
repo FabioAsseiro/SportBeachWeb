@@ -1,14 +1,17 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { quadras } from "../data/quadras";
 import { CardName } from "../components/ui/CardName";
 
 export function Quadra() {
   const navigate = useNavigate();
-  const { state: quadra } = useLocation();
+  const { id } = useParams();
+
+  const quadra = quadras.find((q) => q.id === Number(id));
 
   if (!quadra) {
     return (
       <div className="p-6">
-        <p className="text-red-600 font-bold">Nenhuma quadra foi encontrada.</p>
+        <p className="text-red-600 font-bold">Quadra não encontrada.</p>
         <button className="mt-4 bg-black text-white px-4 py-2 rounded" onClick={() => navigate("/")}>
           Voltar
         </button>
@@ -17,55 +20,78 @@ export function Quadra() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0c16] text-white px-4 py-6">
+    <div className="min-h-screen bg-[#0c0c16] text-white">
 
-      {/* Voltar */}
-      <button
-        onClick={() => navigate("/")}
-        className="text-sm bg-white text-black px-3 py-1 rounded mb-4"
-      >
-        Voltar
-      </button>
+      {/* Topo */}
+      <div className="relative">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-white"
+        >
+          Voltar
+        </button>
 
-      <img
-        src={quadra.image}
-        className="w-full h-44 object-cover rounded-xl mb-4"
-      />
+        <img
+          src={quadra.image}
+          className="w-full h-56 object-cover"
+        />
 
-      <h1 className="text-3xl font-bold">{quadra.name}</h1>
-      <p className="text-gray-300 text-sm mb-4">
-        {quadra.localization} · Endereço exemplo
-      </p>
-
-      {/* Day Use */}
-      <div className="bg-white text-black p-4 rounded-2xl mb-6 shadow">
-        <h2 className="font-bold text-lg">Day Use</h2>
-        <p className="mt-1">💰 R$ {quadra.priceDayUse}</p>
+        <div className="absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black/70 to-transparent w-full">
+          <h1 className="text-3xl font-extrabold">{quadra.name}</h1>
+          <p className="text-gray-300 text-sm">
+            {quadra.localization} · {quadra.info}
+          </p>
+        </div>
       </div>
 
-      {/* Jogadores */}
-      <h2 className="text-xl font-bold mb-2">Jogadores</h2>
+      <div className="px-5 mt-6">
 
-      <div className="flex flex-col gap-4 mb-6">
-        {quadra.jogadores.map((j: any) => (
-          <CardName
-            key={j.name}
-            name={j.name}
-            esporte={j.esporte}
-            nota={j.nota}
-            jogos={j.jogos}
-          />
-        ))}
-      </div>
+        {/* DAY USE */}
+        <div className="bg-white text-black p-5 rounded-2xl shadow-lg mb-6 border border-orange-400">
+          <h2 className="font-bold text-xl mb-1">💰 Day Use</h2>
+          <p className="text-2xl font-extrabold text-orange-600">R$ {quadra.priceDayUse}</p>
+          <button className="mt-3 bg-orange-500 w-full text-white py-2 rounded-xl font-bold hover:bg-orange-600">
+            Reservar agora
+          </button>
+        </div>
 
-      {/* Eventos */}
-      <div className="bg-white text-black p-4 rounded-2xl shadow mb-10">
-        <h2 className="font-bold text-lg">Eventos</h2>
-        <ul className="list-disc ml-4 mt-2">
-          {quadra.eventos.map((e: string, i: number) => (
-            <li key={i}>{e}</li>
+        {/* JOGADORES */}
+        <h2 className="text-2xl font-bold mb-3">Jogadores</h2>
+        <div className="flex flex-col gap-4 mb-8">
+          {quadra.jogadores.map((j) => (
+            <div
+              key={j.name}
+              className="bg-white text-black p-4 rounded-2xl shadow flex items-center gap-4"
+            >
+              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold">
+                {j.name.charAt(0)}
+              </div>
+
+              <div className="flex flex-col">
+                <span className="font-bold text-lg">{j.name}</span>
+                <span className="text-sm text-gray-600">{j.esporte}</span>
+                <span className="text-sm text-yellow-600 font-bold">
+                  ⭐ {j.nota} · {j.jogos} jogos
+                </span>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
+
+        {/* EVENTOS */}
+        <h2 className="text-2xl font-bold mb-3">Eventos</h2>
+
+        <div className="flex flex-col gap-3 mb-16">
+          {quadra.eventos.map((e, idx) => (
+            <div
+              key={idx}
+              className="bg-white text-black p-4 rounded-xl shadow flex items-center gap-3"
+            >
+              <span className="text-2xl">📅</span>
+              <span className="font-medium">{e}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

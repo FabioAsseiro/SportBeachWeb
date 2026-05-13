@@ -1,105 +1,81 @@
 import { useNavigate } from "react-router-dom";
+import { quadras } from "../data/quadras";
 
 export function Lobby() {
   const navigate = useNavigate();
 
-  const quadras = [
-    {
-      id: 1,
-      name: "Arena Real",
-      distance: "320 m",
-      localization: "Copacabana",
-      image: "https://picsum.photos/200?x=1",
-      tags: ["Futevôlei", "Beach Tennis", "Vôlei"],
-      status: "Aberta",
-      info: "4 quadras · #1 no ranking local",
-      priceDayUse: 15,
-      jogadores: [
-        { name: "Carlos Oliveira", esporte: "Vôlei de Praia", nota: 4.2, jogos: 18 },
-        { name: "Maria Fernanda", esporte: "Futevôlei", nota: 4.8, jogos: 25 },
-        { name: "João Pedro", esporte: "Beach Tennis", nota: 4.5, jogos: 30 },
-        { name: "Luiza Costa", esporte: "Vôlei", nota: 4.7, jogos: 22 },
-      ],
-      eventos: ["Desafio de Duplas - 10/07", "Torneio Mensal - 20/07"],
-    },
-    {
-      id: 2,
-      name: "Arena Lua & Sol",
-      distance: "8 km",
-      localization: "Praia Norte",
-      image: "https://picsum.photos/200?x=2",
-      tags: ["Beach Tennis", "Vôlei"],
-      status: "Aberta",
-      info: "6 quadras · 145 jogadores ativos",
-      priceDayUse: 15,
-      jogadores: [
-        { name: "Fabio Nogueira", esporte: "Futevôlei", nota: 4.2, jogos: 18 },
-        { name: "Ana Silva", esporte: "Vôlei", nota: 4.8, jogos: 25 },
-        { name: "Marcos Lima", esporte: "Beach Tennis", nota: 4.5, jogos: 30 },
-        { name: "Julia Santos", esporte: "Vôlei de Praia", nota: 4.7, jogos: 22 },
-      ],
-      eventos: ["Desafio de Duplas - 10/07"],
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#0c0c16] px-4 py-6 text-white">
+    <div className="min-h-screen bg-[#f5f7fa] text-black px-10 py-8">
 
-      <h1 className="text-3xl font-bold">Arenas</h1>
-      <p className="text-sm text-gray-300 mb-6">Beach Sports</p>
+      {/* HEADER */}
+      <header className="flex items-center gap-4 mb-10">
+        <div className="w-12 h-12 rounded-full bg-orange-500"></div>
+        <h1 className="text-xl font-semibold">Sport Beach</h1>
 
-      {/* Tabs */}
-      <div className="flex mb-5 border-b border-gray-700">
-        {["Próximas", "Favoritas", "Todas"].map((tab, i) => (
-          <button
-            key={i}
-            className={`px-4 py-2 text-sm ${
-              i === 0 ? "text-yellow-400 border-b-2 border-yellow-400" : "text-gray-400"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+        <nav className="ml-20 flex gap-10 text-[15px] font-medium">
+          <button className="hover:text-orange-600 transition">Arena</button>
+          <button className="hover:text-orange-600 transition">Usuário</button>
+          <button className="hover:text-orange-600 transition">Configuração</button>
+        </nav>
+      </header>
 
-      {/* Lista */}
-      <div className="flex flex-col gap-3">
+      {/* GRID 2 COLUNAS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl">
+
         {quadras.map((quadra) => (
           <div
             key={quadra.id}
-            onClick={() => navigate(`/quadra/${quadra.id}`, { state: quadra })}
-            className="bg-[#1a1a25] rounded-xl p-4 shadow-md cursor-pointer hover:bg-[#222233] transition"
+            onClick={() => navigate(`/quadra/${quadra.id}`)}
+            className="bg-white shadow-lg rounded-2xl overflow-hidden cursor-pointer
+                       hover:scale-[1.02] hover:shadow-xl transition"
           >
-            <div className="flex gap-3">
-              <img src={quadra.image} className="w-14 h-14 rounded-xl object-cover" />
-              <div className="flex-1">
-                <div className="flex justify-between">
-                  <h2 className="text-lg font-semibold">{quadra.name}</h2>
-                  <span className="text-xs bg-green-500 text-black px-2 py-1 rounded-full">
-                    {quadra.status}
-                  </span>
-                </div>
+            {/* Imagem */}
+            <img
+              src={quadra.image}
+              alt={quadra.name}
+              className="h-40 w-full object-cover"
+            />
 
-                <p className="text-gray-400 text-sm">
-                  {quadra.localization} · {quadra.distance}
-                </p>
+            {/* Conteúdo */}
+            <div className="p-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold">{quadra.name}</h2>
 
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {quadra.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs bg-black/40 px-2 py-1 rounded-full border border-gray-700"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <p className="text-gray-400 text-xs mt-2">{quadra.info}</p>
+                <span
+                  className={`
+                    text-white text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full
+                    ${quadra.status === "Aberta"
+                      ? "bg-green-500 shadow-md shadow-green-400/40"
+                      : "bg-red-500 shadow-md shadow-red-500/40"
+                    }
+                  `}
+                >
+                  {quadra.status}
+                </span>
               </div>
+
+              <p className="text-gray-700 text-sm mt-1">
+                {quadra.localization} · {quadra.distance}
+              </p>
+
+              {/* TAGS */}
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {quadra.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* INFO */}
+              <p className="text-gray-500 text-xs mt-3">{quadra.info}</p>
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );
