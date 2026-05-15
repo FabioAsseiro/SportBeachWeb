@@ -36,7 +36,7 @@ export function Quadra() {
           className="w-full h-56 object-cover"
         />
 
-        <div className="absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black/70 to-transparent w-full">
+        <div className="absolute bottom-0 left-0 p-4 bg-linear-to-t from-black/70 to-transparent w-full">
           <h1 className="text-3xl font-extrabold">{quadra.name}</h1>
           <p className="text-gray-300 text-sm">
             {quadra.localization} · {quadra.info}
@@ -59,22 +59,7 @@ export function Quadra() {
         <h2 className="text-2xl font-bold mb-3">Jogadores</h2>
         <div className="flex flex-col gap-4 mb-8">
           {quadra.jogadores.map((j) => (
-            <div
-              key={j.name}
-              className="bg-white text-black p-4 rounded-2xl shadow flex items-center gap-4"
-            >
-              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold">
-                {j.name.charAt(0)}
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-bold text-lg">{j.name}</span>
-                <span className="text-sm text-gray-600">{j.esporte}</span>
-                <span className="text-sm text-yellow-600 font-bold">
-                  ⭐ {j.nota} · {j.jogos} jogos
-                </span>
-              </div>
-            </div>
+           CardName({ name: j.name, esporte: j.esporte, nota: j.nota, jogos: j.jogos })
           ))}
         </div>
 
